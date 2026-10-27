@@ -4,9 +4,7 @@
 
 """Various meta-tests for conftest.py."""
 
-
 import os
-import sys
 import warnings
 
 import pytest
@@ -33,5 +31,4 @@ def test_fail_on_warnings():
                    strict=False)
 def test_installed_package():
     """Make sure the tests are running against the installed package."""
-    print(sys.path)
     assert '.tox' in qutebrowser.__file__.split(os.sep)
