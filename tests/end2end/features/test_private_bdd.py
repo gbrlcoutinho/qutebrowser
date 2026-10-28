@@ -24,7 +24,6 @@ def check_cookie_not_set(quteproc, name):
     """Check if a given cookie is not set."""
     content = quteproc.get_content()
     data = json.loads(content)
-    print(data)
     assert name not in data['cookies']
 
 
