@@ -16,7 +16,6 @@ def check_cookie(quteproc, name, value):
     """
     content = quteproc.get_content()
     data = json.loads(content)
-    print(data)
     assert data['cookies'][name] == value
 
 
