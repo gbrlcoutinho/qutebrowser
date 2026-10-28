@@ -246,11 +246,10 @@ class TestCompletionItemFocusPage:
         completionview.set_model(model)
 
         for move, item in steps:
-            print('{:9} -> expecting {}'.format(move, item))
             with qtbot.wait_signal(completionview.selection_changed) as blocker:
                 completionview.completion_item_focus(move)
             assert blocker.args == [item]
-
+            
     def test_category_headers(self, completionview, qtbot, model):
         for name, items in [
                 ("First", [("Item {}".format(i),) for i in range(1, 9)]),
