@@ -11,6 +11,7 @@ from qutebrowser.qt import machinery
 from qutebrowser.qt.core import Qt, QEvent, pyqtSignal
 from qutebrowser.qt.gui import QKeyEvent, QKeySequence
 from qutebrowser.qt.widgets import QWidget
+import contextlib
 
 from helpers import testutils
 from unit.keyinput import key_data
@@ -554,11 +555,8 @@ class TestKeySequence:
 
     @hypothesis.given(strategies.text())
     def test_parse_hypothesis(self, keystr):
-        try:
+        with contextlib.suppress(keyutils.KeyParseError):
             seq = keyutils.KeySequence.parse(keystr)
-        except keyutils.KeyParseError:
-            pass
-        else:
             str(seq)  # noqa: B018
 
 
