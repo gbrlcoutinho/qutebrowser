@@ -28,7 +28,6 @@ def test_generate_pdfjs_page(available, snippet, monkeypatch):
 
     monkeypatch.setattr(pdfjs, 'is_available', lambda: available)
     content = pdfjs.generate_pdfjs_page('example.pdf', QUrl())
-    print(content)
     assert snippet in content
 
 
