@@ -80,12 +80,13 @@ def test_type_conv_invalid(typ, value, type_message, multi):
         True: 'foo: Invalid value {}'.format(value),
         False: type_message,
     }[multi]
+    converter, converter_type = {
+        True: (argparser.multitype_conv, [typ]),
+        False: (argparser.type_conv, typ),
+    }[multi]
 
     with pytest.raises(cmdexc.ArgumentTypeError, match=msg):
-        if multi:
-            argparser.multitype_conv(param, [typ], value)
-        else:
-            argparser.type_conv(param, typ, value)
+        converter(param, converter_type, value)
 
 
 def test_multitype_conv_invalid_type():
