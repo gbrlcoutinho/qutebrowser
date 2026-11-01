@@ -168,7 +168,7 @@ class TestWaitFor:
 
     def test_other_text(self, pyproc):
         """Test wait_for when getting some unrelated text."""
-        pyproc.code = "time.sleep(0.1); print('blahblah')"
+        pyproc.code = "print('blahblah')"
         pyproc.start()
         with pytest.raises(testprocess.WaitForTimeout):
             pyproc.wait_for(data="foobar", timeout=500)
