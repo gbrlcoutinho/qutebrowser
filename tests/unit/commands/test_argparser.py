@@ -51,21 +51,18 @@ class TestArgumentParser:
         assert tabbed_browser_stubs[1].loaded_url == expected_url
 
 
-@pytest.mark.parametrize('types, value, expected', [
-    ([Enum], 'foo', Enum.foo),
-    ([Enum], 'foo-bar', Enum.foo_bar),
-
-    ([int], '2', 2),
-    ([int, str], 'foo', 'foo'),
+@pytest.mark.parametrize('converter, typ, value, expected', [
+    (argparser.multitype_conv, [Enum], 'foo', Enum.foo),
+    (argparser.multitype_conv, [Enum], 'foo-bar', Enum.foo_bar),
+    (argparser.multitype_conv, [int], '2', 2),
+    (argparser.multitype_conv, [int, str], 'foo', 'foo'),
+    (argparser.type_conv, Enum, 'foo', Enum.foo),
+    (argparser.type_conv, Enum, 'foo-bar', Enum.foo_bar),
+    (argparser.type_conv, int, '2', 2),
 ])
-@pytest.mark.parametrize('multi', [True, False])
-def test_type_conv_valid(types, value, expected, multi):
+def test_type_conv_valid(converter, typ, value, expected):
     param = inspect.Parameter('foo', inspect.Parameter.POSITIONAL_ONLY)
-
-    if multi:
-        assert argparser.multitype_conv(param, types, value) == expected
-    elif len(types) == 1:
-        assert argparser.type_conv(param, types[0], value) == expected
+    assert converter(param, typ, value) == expected
 
 
 @pytest.mark.parametrize('typ, value', [
