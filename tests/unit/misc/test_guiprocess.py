@@ -330,7 +330,7 @@ def test_start_detached_error(fake_proc, message_mock, caplog):
 def test_double_start(qtbot, proc, py_proc):
     """Test starting a GUIProcess twice."""
     with qtbot.wait_signal(proc.started, timeout=10000):
-        cmd, args = py_proc("import time; time.sleep(10)")
+        cmd, args = py_proc("import sys; sys.stdin.read()")
         proc.start(cmd, args)
     with pytest.raises(ValueError):
         proc.start('', [])
