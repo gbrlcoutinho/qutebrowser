@@ -244,8 +244,9 @@ class TestEnsureNotLogged:
                 pyproc.ensure_not_logged(data=pattern, delay=2000)
 
     def test_late_message(self, pyproc):
-        pyproc.code = "time.sleep(0.5); print('blacklisted')"
+        pyproc.code = "input(); print('blacklisted')"
         pyproc.start()
+        QTimer.singleShot(0, lambda: pyproc.proc.write(b'\n'))
         with pytest.raises(testprocess.BlacklistedMessageError):
             pyproc.ensure_not_logged(data='blacklisted', delay=5000)
 
