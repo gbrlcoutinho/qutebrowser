@@ -65,23 +65,21 @@ def test_type_conv_valid(converter, typ, value, expected):
     assert converter(param, typ, value) == expected
 
 
-@pytest.mark.parametrize('typ, value', [
-    (Enum, 'blubb'),
-    (Enum, 'foo_bar'),
-    (int, '2.5'),
-    (int, 'foo'),
+@pytest.mark.parametrize('typ, value, type_message', [
+    (Enum, 'blubb',
+     'foo: Invalid value blubb - expected one of: foo, foo-bar'),
+    (Enum, 'foo_bar',
+     'foo: Invalid value foo_bar - expected one of: foo, foo-bar'),
+    (int, '2.5', 'foo: Invalid int value 2.5'),
+    (int, 'foo', 'foo: Invalid int value foo'),
 ])
 @pytest.mark.parametrize('multi', [True, False])
-def test_type_conv_invalid(typ, value, multi):
+def test_type_conv_invalid(typ, value, type_message, multi):
     param = inspect.Parameter('foo', inspect.Parameter.POSITIONAL_ONLY)
-
-    if multi:
-        msg = 'foo: Invalid value {}'.format(value)
-    elif typ is Enum:
-        msg = ('foo: Invalid value {} - expected one of: foo, '
-               'foo-bar'.format(value))
-    else:
-        msg = 'foo: Invalid {} value {}'.format(typ.__name__, value)
+    msg = {
+        True: 'foo: Invalid value {}'.format(value),
+        False: type_message,
+    }[multi]
 
     with pytest.raises(cmdexc.ArgumentTypeError, match=msg):
         if multi:
