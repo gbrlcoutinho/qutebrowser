@@ -10,7 +10,7 @@ import contextlib
 import datetime
 
 import pytest
-from qutebrowser.qt.core import QProcess
+from qutebrowser.qt.core import QProcess, QTimer
 
 from end2end.fixtures import testprocess
 
@@ -161,10 +161,10 @@ class TestWaitFor:
 
     def test_successful(self, pyproc):
         """Using wait_for with the expected text."""
-        pyproc.code = "time.sleep(0.5); print('foobar')"
-        with stopwatch(min_ms=500):
-            pyproc.start()
-            pyproc.wait_for(data="foobar")
+        pyproc.code = "input(); print('foobar')"
+        pyproc.start()
+        QTimer.singleShot(0, lambda: pyproc.proc.write(b'\n'))
+        pyproc.wait_for(data="foobar")
 
     def test_other_text(self, pyproc):
         """Test wait_for when getting some unrelated text."""
