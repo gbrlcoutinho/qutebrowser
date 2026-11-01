@@ -371,7 +371,7 @@ def test_start_logging(fake_proc, caplog):
 def test_running(qtbot, proc, py_proc):
     """Test proc.outcome while the process is still running."""
     with qtbot.wait_signal(proc.started, timeout=5000):
-        proc.start(*py_proc("import time; time.sleep(10)"))
+        proc.start(*py_proc("import sys; sys.stdin.read()"))
     assert proc.outcome.running
     assert proc.outcome.status is None
     assert proc.outcome.code is None
