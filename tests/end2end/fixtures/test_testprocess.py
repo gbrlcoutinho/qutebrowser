@@ -206,7 +206,7 @@ class TestWaitFor:
         existing messages, as that makes it likely it's not what we actually
         want.
         """
-        pyproc.code = "time.sleep(0.1); print('foobar')"
+        pyproc.code = "print('foobar')"
         pyproc.start()
         pyproc.wait_for(data="foobar")
         with pytest.raises(testprocess.WaitForTimeout):
